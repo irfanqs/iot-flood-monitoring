@@ -17,7 +17,7 @@ Prototipe pendeteksi ketinggian banjir memakai **ESP32 DevKit V1 (30-pin)** dan 
 |---|---|---|---|---|
 | Tidak ada | AMAN | Menyala | Hijau | Diam |
 | Float 1 | SIAGA | Menyala | Kuning | Pola SIAGA |
-| Float 1-2 | WASPADA | Menyala | Biru | Pola WASPADA |
+| Float 1-2 | WASPADA | Menyala | Orange | Pola WASPADA |
 | Float 1-3 | BAHAYA | **Mati** | Merah | Pola BAHAYA |
 
 Begitu float 3 lepas, relay langsung menyala lagi. LED merah dan suara BAHAYA berhenti, lalu LED dan buzzer mengikuti level saat itu.
@@ -42,7 +42,7 @@ Begitu float 3 lepas, relay langsung menyala lagi. LED merah dan suara BAHAYA be
 | Float 3 (tinggi) | GPIO18 | Kabel lain ke GND |
 | LED hijau (AMAN) | GPIO2 | Lewat resistor 220Ω, katoda ke GND. LED onboard ikut menyala |
 | LED kuning (SIAGA) | GPIO32 (sisi kiri) | Lewat resistor 220Ω, katoda ke GND |
-| LED biru (WASPADA) | GPIO4 | Lewat resistor 220Ω (atau 100Ω kalau terlalu redup), katoda ke GND |
+| LED orange (WASPADA) | GPIO33 (sisi kiri) | Lewat resistor 220Ω, katoda ke GND |
 | LED merah (BAHAYA) | GPIO17 (TX2) | Lewat resistor 220Ω, katoda ke GND |
 | Buzzer aktif (2 kaki) | GPIO22 | Kaki panjang (+) ke GPIO22, kaki pendek (−) ke GND |
 | Tombol MUTE | GPIO5 | Kaki lain ke GND |
@@ -51,7 +51,7 @@ Begitu float 3 lepas, relay langsung menyala lagi. LED merah dan suara BAHAYA be
 | Layar SDA (OLED/LCD I2C) | GPIO25 (sisi kiri) | OLED: VCC ke 3V3. LCD 16x2: VCC ke VIN (5V) |
 | Layar SCL (OLED/LCD I2C) | GPIO26 (sisi kiri) | GND layar ke GND |
 
-Semua pin sinyal ada di sisi kanan board, kecuali LED kuning di GPIO32 dan VIN untuk relay di sisi kiri.
+Semua pin sinyal ada di sisi kanan board, kecuali LED kuning (GPIO32), LED orange (GPIO33), layar (GPIO25/26), dan VIN untuk relay di sisi kiri.
 
 GPIO2, GPIO5, dan GPIO15 adalah strapping pin. Jangan tekan MUTE atau RESET saat ESP32 boot atau upload, dan jangan pasang pull-up di GPIO2.
 

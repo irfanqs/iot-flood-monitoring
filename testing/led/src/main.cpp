@@ -8,11 +8,11 @@
 //   3. semua LED mati 1 detik
 // Catatan: LED biru onboard ikut menyala bersama LED hijau (sama-sama GPIO2).
 
-const uint8_t PIN_LEDS[4] = {2, 4, 32, 17};
+const uint8_t PIN_LEDS[4] = {2, 32, 33, 17};
 const char* const LED_NAMES[4] = {
     "hijau  (AMAN)    D2",
-    "kuning (SIAGA)   D4",
-    "oranye (WASPADA) D32 (kiri)",
+    "kuning (SIAGA)   D32 (kiri)",
+    "orange (WASPADA) D33 (kiri)",
     "merah  (BAHAYA)  TX2/GPIO17",
 };
 

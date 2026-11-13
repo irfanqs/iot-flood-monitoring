@@ -29,7 +29,7 @@ const uint8_t PIN_FLOAT_HIGH = 18;
 
 const uint8_t PIN_LED_GREEN = 2;    // AMAN
 const uint8_t PIN_LED_YELLOW = 32;  // SIAGA
-const uint8_t PIN_LED_BLUE = 4;     // WASPADA
+const uint8_t PIN_LED_ORANGE = 33;  // WASPADA
 const uint8_t PIN_LED_RED = 17;     // BAHAYA
 
 const uint8_t PIN_BUZZER = 22;
@@ -172,7 +172,7 @@ void applyRelay() {
 void displayLeds(uint32_t now) {
   bool green = false;
   bool yellow = false;
-  bool blue = false;
+  bool orange = false;
   bool red = false;
 
   if (feedback == FB_REJECT) {
@@ -184,13 +184,13 @@ void displayLeds(uint32_t now) {
   } else {
     green = level == 0;
     yellow = level == 1;
-    blue = level == 2;
+    orange = level == 2;
     red = level == 3;
   }
 
   digitalWrite(PIN_LED_GREEN, green ? HIGH : LOW);
   digitalWrite(PIN_LED_YELLOW, yellow ? HIGH : LOW);
-  digitalWrite(PIN_LED_BLUE, blue ? HIGH : LOW);
+  digitalWrite(PIN_LED_ORANGE, orange ? HIGH : LOW);
   digitalWrite(PIN_LED_RED, red ? HIGH : LOW);
 }
 
@@ -354,8 +354,8 @@ void testRelay(bool powerOn) {
 }
 
 void selfTest() {
-  const uint8_t leds[4] = {PIN_LED_GREEN, PIN_LED_YELLOW, PIN_LED_BLUE, PIN_LED_RED};
-  const char* const ledNames[4] = {"hijau", "kuning", "biru", "merah"};
+  const uint8_t leds[4] = {PIN_LED_GREEN, PIN_LED_YELLOW, PIN_LED_ORANGE, PIN_LED_RED};
+  const char* const ledNames[4] = {"hijau", "kuning", "orange", "merah"};
 
   Serial.println("[TES] mulai tes komponen");
 
@@ -470,11 +470,11 @@ void setup() {
 
   pinMode(PIN_LED_GREEN, OUTPUT);
   pinMode(PIN_LED_YELLOW, OUTPUT);
-  pinMode(PIN_LED_BLUE, OUTPUT);
+  pinMode(PIN_LED_ORANGE, OUTPUT);
   pinMode(PIN_LED_RED, OUTPUT);
   digitalWrite(PIN_LED_GREEN, LOW);
   digitalWrite(PIN_LED_YELLOW, LOW);
-  digitalWrite(PIN_LED_BLUE, LOW);
+  digitalWrite(PIN_LED_ORANGE, LOW);
   digitalWrite(PIN_LED_RED, LOW);
 
   setRelayPower(false);
