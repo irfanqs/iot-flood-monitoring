@@ -1,0 +1,423 @@
+{
+  "version": 1,
+  "author": "opencode",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": -100,
+      "left": -100,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "fsLow",
+      "top": 40,
+      "left": -300,
+      "attrs": {
+        "value": "1",
+        "bounce": "0"
+      }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "fsMid",
+      "top": 140,
+      "left": -300,
+      "attrs": {
+        "value": "1",
+        "bounce": "0"
+      }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "fsHigh",
+      "top": 240,
+      "left": -300,
+      "attrs": {
+        "value": "1",
+        "bounce": "0"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledGreen",
+      "top": -220,
+      "left": 20,
+      "attrs": {
+        "color": "green",
+        "label": "AMAN"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledYellow",
+      "top": -220,
+      "left": 100,
+      "attrs": {
+        "color": "yellow",
+        "label": "SIAGA"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledOrange",
+      "top": -220,
+      "left": 180,
+      "attrs": {
+        "color": "orange",
+        "label": "WASPADA"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledRed",
+      "top": -220,
+      "left": 260,
+      "attrs": {
+        "color": "red",
+        "label": "BAHAYA"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rGreen",
+      "top": -180,
+      "left": 20,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rYellow",
+      "top": -180,
+      "left": 100,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rOrange",
+      "top": -180,
+      "left": 180,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rRed",
+      "top": -180,
+      "left": 260,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz",
+      "top": 40,
+      "left": 100,
+      "attrs": {
+        "volume": "0.5"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnMute",
+      "top": 140,
+      "left": 100,
+      "attrs": {
+        "color": "blue",
+        "label": "MUTE",
+        "key": "m",
+        "bounce": "0"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnReset",
+      "top": 240,
+      "left": 100,
+      "attrs": {
+        "color": "green",
+        "label": "RESET",
+        "key": "r",
+        "bounce": "0"
+      }
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relay",
+      "top": 40,
+      "left": 300,
+      "attrs": {
+        "transistor": "npn"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "lamp",
+      "top": 180,
+      "left": 300,
+      "attrs": {
+        "color": "white",
+        "label": "Lampu (sim. 12V)"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rLamp",
+      "top": 260,
+      "left": 300,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "txtF1",
+      "top": 20,
+      "left": -420,
+      "attrs": {
+        "text": "Float 1 (rendah)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "txtF2",
+      "top": 120,
+      "left": -420,
+      "attrs": {
+        "text": "Float 2 (tengah)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "txtF3",
+      "top": 220,
+      "left": -420,
+      "attrs": {
+        "text": "Float 3 (tinggi)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "txtHint",
+      "top": 320,
+      "left": -420,
+      "attrs": {
+        "text": "Geser switch ke KIRI = terpicu (air naik)"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "fsLow:1",
+      "esp:D21",
+      "green",
+      []
+    ],
+    [
+      "fsLow:2",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "fsMid:1",
+      "esp:D19",
+      "green",
+      []
+    ],
+    [
+      "fsMid:2",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "fsHigh:1",
+      "esp:D18",
+      "green",
+      []
+    ],
+    [
+      "fsHigh:2",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "rGreen:1",
+      "esp:D2",
+      "green",
+      []
+    ],
+    [
+      "rGreen:2",
+      "ledGreen:A",
+      "",
+      []
+    ],
+    [
+      "ledGreen:C",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "rYellow:1",
+      "esp:D4",
+      "yellow",
+      []
+    ],
+    [
+      "rYellow:2",
+      "ledYellow:A",
+      "",
+      []
+    ],
+    [
+      "ledYellow:C",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "rOrange:1",
+      "esp:D32",
+      "orange",
+      []
+    ],
+    [
+      "rOrange:2",
+      "ledOrange:A",
+      "",
+      []
+    ],
+    [
+      "ledOrange:C",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "rRed:1",
+      "esp:TX2",
+      "red",
+      []
+    ],
+    [
+      "rRed:2",
+      "ledRed:A",
+      "",
+      []
+    ],
+    [
+      "ledRed:C",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "bz:1",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "bz:2",
+      "esp:D22",
+      "green",
+      []
+    ],
+    [
+      "btnMute:1.l",
+      "esp:D5",
+      "green",
+      []
+    ],
+    [
+      "btnMute:2.l",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "btnReset:1.l",
+      "esp:D15",
+      "green",
+      []
+    ],
+    [
+      "btnReset:2.l",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "relay:VCC",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "relay:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "relay:IN",
+      "esp:D23",
+      "blue",
+      []
+    ],
+    [
+      "relay:COM",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "relay:NO",
+      "rLamp:1",
+      "red",
+      []
+    ],
+    [
+      "rLamp:2",
+      "lamp:A",
+      "",
+      []
+    ],
+    [
+      "lamp:C",
+      "esp:GND.2",
+      "black",
+      []
+    ]
+  ],
+  "dependencies": {}
+}
