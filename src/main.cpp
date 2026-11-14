@@ -2,7 +2,7 @@
 #include <Wire.h>
 
 // Layar status: 0 = tanpa layar, 1 = OLED 0.96" SSD1306, 2 = LCD 16x2 I2C.
-#define DISPLAY_TYPE 1
+#define DISPLAY_TYPE 2
 
 #if DISPLAY_TYPE == 1
 #include <Adafruit_GFX.h>
@@ -22,6 +22,12 @@
 // Buzzer 2 kaki tanpa board: aktif HIGH (0).
 // Modul buzzer 3 pin (GND/VCC/IO) umumnya aktif LOW: ubah ke 1.
 #define BUZZER_ACTIVE_LOW 0
+
+// Arah float switch.
+// 1 = saklar tertutup saat pelampung terangkat (terangkat = air naik).
+// 0 = saklar tertutup saat pelampung turun. Pakai 0 kalau alat terbaca
+//     BAHAYA saat air kosong dan AMAN saat pelampung diangkat.
+#define FLOAT_CLOSED_WHEN_UP 0
 
 const uint8_t PIN_FLOAT_LOW = 21;
 const uint8_t PIN_FLOAT_MID = 19;
@@ -119,8 +125,22 @@ void setRelayPower(bool powerOn) {
 #endif
 }
 
+bool isFloatPin(uint8_t pin) {
+  return pin == PIN_FLOAT_LOW || pin == PIN_FLOAT_MID || pin == PIN_FLOAT_HIGH;
+}
+
+// Tombol: ditekan = pin LOW.
+// Float: tergantung FLOAT_CLOSED_WHEN_UP (lihat bagian atas file).
 bool readTriggered(uint8_t pin) {
-  return digitalRead(pin) == LOW;
+  bool closed = digitalRead(pin) == LOW;
+  if (isFloatPin(pin)) {
+#if FLOAT_CLOSED_WHEN_UP
+    return closed;
+#else
+    return !closed;
+#endif
+  }
+  return closed;
 }
 
 bool updateDebounced(DebouncedInput& input, uint32_t now, uint32_t debounceMs) {
@@ -353,11 +373,15 @@ void testRelay(bool powerOn) {
   setRelayPower(powerOn);
 }
 
+// Tulisan dua baris di layar, dipakai saat tes komponen.
+void showMessage(const char* line1, const char* line2);
+
 void selfTest() {
   const uint8_t leds[4] = {PIN_LED_GREEN, PIN_LED_YELLOW, PIN_LED_ORANGE, PIN_LED_RED};
   const char* const ledNames[4] = {"hijau", "kuning", "orange", "merah"};
 
   Serial.println("[TES] mulai tes komponen");
+  showMessage("Testing LED", "");
 
   for (uint8_t i = 0; i < 4; i++) {
     Serial.print("[TES] LED ");
@@ -372,6 +396,7 @@ void selfTest() {
   delay(600);
   for (uint8_t i = 0; i < 4; i++) digitalWrite(leds[i], LOW);
 
+  showMessage("Testing buzzer", "");
   Serial.println("[TES] buzzer");
   for (uint8_t i = 0; i < 2; i++) {
     testBuzzer(true);
@@ -380,6 +405,7 @@ void selfTest() {
     delay(150);
   }
 
+  showMessage("Testing relay", "");
   Serial.println("[TES] relay nyala (lampu menyala)");
   testRelay(true);
   delay(1000);
@@ -388,6 +414,8 @@ void selfTest() {
   delay(1000);
 
   Serial.println("[TES] selesai");
+  showMessage("Tes selesai", "");
+  delay(800);
 }
 
 #if DISPLAY_TYPE == 1
@@ -462,6 +490,30 @@ void updateDisplay() {
 #endif
 }
 
+void showMessage(const char* line1, const char* line2) {
+#if DISPLAY_TYPE == 1
+  if (!displayReady) return;
+  oled.clearDisplay();
+  oled.setTextColor(SSD1306_WHITE);
+  oled.setTextSize(1);
+  oled.setCursor(0, 20);
+  oled.print(line1);
+  oled.setCursor(0, 36);
+  oled.print(line2);
+  oled.display();
+#elif DISPLAY_TYPE == 2
+  if (!displayReady) return;
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(line1);
+  lcd.setCursor(0, 1);
+  lcd.print(line2);
+#else
+  (void)line1;
+  (void)line2;
+#endif
+}
+
 void setup() {
   Serial.begin(115200);
 
@@ -484,6 +536,9 @@ void setup() {
   pinMode(PIN_FLOAT_HIGH, INPUT_PULLUP);
   pinMode(PIN_BTN_MUTE, INPUT_PULLUP);
   pinMode(PIN_BTN_RESET, INPUT_PULLUP);
+
+  // Layar disiapkan sebelum tes supaya tulisan tes bisa tampil.
+  setupDisplay();
 
 #if SELF_TEST_ON_BOOT
   selfTest();
@@ -519,7 +574,6 @@ void setup() {
   selectPattern();
   displayLeds(millis());
 
-  setupDisplay();
   updateDisplay();
 
   Serial.println("Sistem deteksi banjir siap");

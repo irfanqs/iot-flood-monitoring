@@ -39,10 +39,13 @@ void setup() {
   Serial.println("Tes LCD 16x2 dimulai");
 
   Wire.begin(PIN_SDA, PIN_SCL);
+
+  // Pindai ulang tiap 2 detik sampai LCD ketemu, jadi kabel bisa dibetulkan
+  // tanpa upload ulang.
   uint8_t addr = scanI2C();
-  if (addr == 0) {
-    Serial.println("Tes berhenti.");
-    while (true) delay(1000);
+  while (addr == 0) {
+    delay(2000);
+    addr = scanI2C();
   }
 
   lcd = new LiquidCrystal_I2C(addr, 16, 2);
@@ -53,6 +56,11 @@ void setup() {
 }
 
 void loop() {
+  // Backlight berkedip sekali tiap putaran: tanda LCD menerima perintah.
+  lcd->noBacklight();
+  delay(300);
+  lcd->backlight();
+
   for (uint8_t i = 0; i < 4; i++) {
     lcd->clear();
     lcd->setCursor(0, 0);
